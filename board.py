@@ -56,6 +56,9 @@ class Board(object):
         self.boxes = {}
         self.player = None
 
+    def move(self, direction):
+        x_diff, y_diff = DIRECTION[direction]
+        
 
     def finished(self):
         for goal in self.goals:
@@ -65,7 +68,6 @@ class Board(object):
 
 
     def moves_available(self):
-        pass
         x, y = self.player.x, self.player.y
         moves = [('u', (0, -1)), ('r', (1, 0)),
                  ('d', (0, 1)), ('l', (-1, 0))]
