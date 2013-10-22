@@ -6,7 +6,9 @@ import argparse
 from sys import exit
 
 from searches import breadth_first_search as bfs
-searches = [bfs]
+from searches import depth_first_search as dfs
+
+searches = [dfs]
 
 
 def report(r, b):

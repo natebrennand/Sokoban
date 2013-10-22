@@ -13,7 +13,7 @@ def breadth_first_search(board):
         'fringe' : 0,
         'explored' : visited_nodes,
     }
-    current_queue = [(deepcopy(board), move) for move in board.moves_available()]
+    current_queue = [(deepcopy(board), move) for move, cost in board.moves_available()]
 
     print 'repeat\tseen'
     return iterate_bfs(current_queue, records)
@@ -58,7 +58,7 @@ def bfs(queue, records):
         if b.finished():    # checks if done
             return True, records, b
 
-        next_moves = b.moves_available()
+        next_moves = [move for move, cost in b.moves_available()]
 
         if next_moves:
             if hash(b) not in records['explored']:

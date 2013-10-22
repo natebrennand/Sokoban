@@ -121,10 +121,11 @@ class Board(object):
         placement of walls.
         """
         x, y = self.player.x, self.player.y
-        moves = [('u', (0, -1)), ('r', (1, 0)),
-                 ('d', (0, 1)), ('l', (-1, 0))]
+        moves = [('u', 1, (0, -1)), ('r', 1, (1, 0)),
+                 ('d', 1, (0, 1)), ('l', 1, (-1, 0))]
+        pushes = []
 
-        move_options = [(i, m, p) for i, (m, p) in enumerate(moves)]
+        move_options = [(i, m, p) for i, (m, c, p) in enumerate(moves)]
         for index, move, (pos_x, pos_y) in reversed(move_options):
             # if a wall blocks the path
             if (x+pos_x, y+pos_y) in self.walls:
@@ -134,11 +135,13 @@ class Board(object):
                 next_pos = (x+2*pos_x, y+2*pos_y)
                 if next_pos in self.walls or next_pos in self.boxes:
                     del moves[index]
+                else:
+                    moves[index] = (m, 2, p)
 
             if not moves:   # no moves available, stop iterating
                 return []
 
-        return [move for move, pos in moves]
+        return [(move, cost) for move, cost, pos in moves]
 
 
     def set_player(self, player):
