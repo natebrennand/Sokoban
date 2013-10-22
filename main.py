@@ -1,5 +1,6 @@
 
 from board import load_map
+from timer import timeit
 from copy import deepcopy
 import argparse
 from sys import exit
@@ -17,9 +18,17 @@ def report(r, b):
     print '\t{}'.format(b.moves)
 
 
+@timeit
 def run_search(board, search):
     results, board = search(board)
     report(results, board)
+
+
+def get_map_str(path):
+    map_str = ''
+    with open(path, 'r') as f:
+        map_str = f.read()
+    return map_str
 
 
 def get_args():
@@ -40,20 +49,14 @@ def get_args():
     return args
 
 
-def get_map_str(path):
-    map_str = ''
-    with open(path, 'r') as f:
-        map_str = f.read()
-    return map_str
-
-
 if __name__ == '__main__':
     args = get_args()
 
     if args.puzzle:
         board = load_map(get_map_str(args.puzzle))
         for search in searches:
-            run_search(deepcopy(board), search)
+            (res, time) = run_search(deepcopy(board), search)
+            print "{} seconds".format(time)
 
     elif args.test:
         print 'running tests...'
