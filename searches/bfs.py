@@ -1,7 +1,7 @@
 
 from copy import deepcopy
 
-def breath_first_search(board):
+def breadth_first_search(board):
     visited_nodes = set()
     records = {
         'node' : 0,
