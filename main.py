@@ -1,29 +1,37 @@
 
 from board import load_map
-from timer import timeit
 from copy import deepcopy
-import argparse
 from sys import exit
+import argparse
+import time
 
 from searches import breadth_first_search as bfs
 from searches import depth_first_search as dfs
 
-searches = [dfs]
+searches = [bfs]
+
+def reportit(f):
+
+    def report(*args, **kw):
+
+        t_start = time.time()
+        report, board = f(*args, **kw)
+        runtime = (time.time()-t_start)
+
+        print ','.join(board.moves)
+        print "a)\t{}\tNodes generated".format(report['node'])
+        print "b)\t{}\tNodes repeated".format(report['repeat'])
+        print 'c)\t{}\tNodes at the fringe of the search'.format(report['fringe'])
+        print 'd)\t{}\tnodes explored'.format(len(report['explored']))
+        print 'e)\t{}\t'.format(runtime)
+
+    return report
 
 
-def report(r, b):
-    print "{} nodes visited".format(r['node'])
-    print "{} nodes repeated".format(r['repeat'])
-    print '{} nodes at the fringe of the search'.format(r['fringe'])
-    print '{} nodes explored'.format(len(r['explored']))
-    print 'Here are the moves made for the solution:'
-    print '\t{}'.format(b.moves)
-
-
-@timeit
+@reportit
 def run_search(board, search):
     results, board = search(board)
-    report(results, board)
+    return results, board
 
 
 def get_map_str(path):
@@ -57,8 +65,7 @@ if __name__ == '__main__':
     if args.puzzle:
         board = load_map(get_map_str(args.puzzle))
         for search in searches:
-            (res, time) = run_search(deepcopy(board), search)
-            print "{} seconds".format(time)
+            run_search(deepcopy(board), search)
 
     elif args.test:
         print 'running tests...'
