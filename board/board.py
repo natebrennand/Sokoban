@@ -77,6 +77,7 @@ class Board(object):
         self.player = None  # the player with their state
         self.moves = []     # array of moves made
 
+
     def move(self, direction):
         """
         @param direction: a direction in the set [u,r,d,l]
@@ -85,24 +86,18 @@ class Board(object):
         Adjusts the board object given a movement.
         """
         x_diff, y_diff = DIRECTION[direction]
-        pos1 = self.player.x + x_diff, self.player.y + y_diff
-        pos2 = self.player.x + 2*x_diff, self.player.y + 2*y_diff
+        pos1 = (self.player.x + x_diff, self.player.y + y_diff)
+        pos2 = (self.player.x + 2*x_diff, self.player.y + 2*y_diff)
 
         # move box if in path
         if pos1 in self.boxes:
             del self.boxes[pos1]
-            # create the new box
-            self.boxes[pos2] = Box(pos2, None)
-            if pos2 in self.goals:
-                self.boxes[pos2].state = 'ON'
-            else:
-                self.boxes[pos2].state = 'OFF'
+            new_state = 'ON' if pos2 in self.goals else 'OFF'
+            self.boxes[pos2] = Box(pos2, new_state)
 
-        # if player is now on a goal
-        if pos1 in self.goals:
-            self.player.state = 'ON_GOAL'
-        else:
-            self.player = Player(pos1, 'NORMAL')
+        # reset player position
+        player_state = 'ON_GOAL' if pos1 in self.goals else 'NORMAL'
+        self.player = Player(pos1, player_state)
 
         # log the move
         self.moves.append(direction)
