@@ -142,6 +142,7 @@ class Board(object):
 
             if not moves:   # no moves available, stop iterating
                 return []
+
         return [move for move, pos in moves]
 
 
@@ -167,12 +168,7 @@ class Board(object):
 
     
     def __hash__(self):
-        return hash((
-            hash(frozenset(self.boxes)),
-            hash(frozenset(self.walls)),
-            hash(frozenset(self.goals)),
-            hash(self.player)
-        ))
+        return hash_board(self.boxes, self.walls, self.player)
 
 
     def __str__(self):
@@ -192,4 +188,12 @@ class Board(object):
 
         str_board = [''.join(line) for line in str_board]
         return '\n'.join(str_board)
+
+
+def hash_board(dict1, dict2, obj):
+    return hash((
+        hash(frozenset(dict1)),
+        hash(frozenset(dict2)),
+        hash(obj)
+    ))
 
