@@ -69,6 +69,7 @@ class Board(object):
         self.goals = {}
         self.boxes = {}
         self.player = None
+        self.moves = []
 
     def move(self, direction):
         """
@@ -103,6 +104,9 @@ class Board(object):
             del self.goals[pos1]
         else:
             self.player = Player(pos1, 'NORMAL')
+
+        # log the move
+        self.moves.append(direction)
 
 
     def finished(self):

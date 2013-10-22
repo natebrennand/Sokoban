@@ -1,4 +1,4 @@
-
+from copy import deepcopy, copy
 from board import load_map
 
 def make_move(current_board, move):
@@ -16,15 +16,23 @@ new_board = load_map(map_str)
 # test moves_available
 assert new_board.moves_available() == ['u','r','d','l']
 
-
-hash1 = hash(new_board)
-new_board.move('d')
-new_board.move('u')
-hash2 = hash(new_board)
+board_copy = deepcopy(new_board)
+hash1 = hash(board_copy)
+board_copy.move('d')
+x = copy(board_copy)
+assert hash(x)==hash(board_copy)
+board_copy.move('u')
+assert hash(x)!=hash(board_copy)
+hash2 = hash(board_copy)
 assert hash1==hash2
 
+move_set = ['u', 'l', 'l', 'l', 'l', 'l', 'd', 'r', 'r', 'r', 'r']
+
 print new_board
-for move in ['u', 'l', 'l', 'l', 'l', 'l', 'd', 'r', 'r', 'r', 'r']:
+for move in move_set:
     make_move(new_board, move)
 
+print new_board.moves 
+print move_set
+assert new_board.moves == move_set
 
