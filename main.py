@@ -8,7 +8,7 @@ import time
 from searches import breadth_first_search as bfs
 from searches import depth_first_search as dfs
 
-searches = [bfs]
+searches = [bfs, dfs]
 
 def reportit(f):
 
@@ -18,6 +18,7 @@ def reportit(f):
         report, board = f(*args, **kw)
         runtime = (time.time()-t_start)
 
+        print
         print ','.join(board.moves)
         print "a)\t{}\tNodes generated".format(report['node'])
         print "b)\t{}\tNodes repeated".format(report['repeat'])
@@ -70,5 +71,3 @@ if __name__ == '__main__':
     elif args.test:
         print 'running tests...'
         pass
-
-

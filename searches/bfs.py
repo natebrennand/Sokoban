@@ -6,16 +6,14 @@ def breadth_first_search(board):
     @param board: a Board obj
     @return: return iterate_bfs fn call
     """
-    visited_nodes = set()
     records = {
         'node' : 0,
         'repeat' : 0,
         'fringe' : 0,
-        'explored' : visited_nodes,
+        'explored' : set([])
     }
-    current_queue = [(deepcopy(board), move) for move, cost in board.moves_available()]
+    current_queue = [(deepcopy(board), move) for (move, cost) in board.moves_available()]
 
-    print 'repeat\tseen'
     return iterate_bfs(current_queue, records)
 
 
@@ -25,20 +23,17 @@ def iterate_bfs(queue, records):
     @param records: a dictionary with various logs that need to be kept
     """
 
+    print 'repeat\tseen'
     while True:
         print "{}\t{}".format(records['repeat'], len(records['explored']))
 
         result = bfs(queue, records)
-        if isinstance(result[0], bool) and result[0] == True:
-            return result[1], result[2]     # records & board
+        if isinstance(result[0], bool):
+            success, records, board = result
+            return records, board
         else:
             queue, records = result
             records['fringe'] = len(queue)
-
-        if len(queue) == 0:
-            break
-
-    print 'failure'
 
 
 def bfs(queue, records):
@@ -56,7 +51,7 @@ def bfs(queue, records):
         records['node'] += 1
         b.move(m)   # performs move
         if b.finished():    # checks if done
-            return True, records, b
+            return (True, records, b)
 
         next_moves = [move for move, cost in b.moves_available()]
 
