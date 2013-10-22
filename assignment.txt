@@ -23,12 +23,12 @@ Your task for this assignment is as follows:
 -Implement a problem solving agent program which takes a text file containing a Sokoban puzzle as input.
 
 The first line of the text file will specify how many lines long the puzzle is, the remainder of the file will contain the puzzle itself, expressed using the following ASCII characters:
-#	(hash)  	Wall 
-.	(period)	Empty goal 
-@	(at)    	Player on floor 
-+	(plus)		Player on goal 
-$	(dollar)	Box on floor 
-*	(asterisk)	Box on goal 
+#   (hash)      Wall 
+.   (period)    Empty goal 
+@   (at)        Player on floor 
++   (plus)      Player on goal 
+$   (dollar)    Box on floor 
+*   (asterisk)  Box on goal 
 
 The following is an example of a valid Sokoban puzzle input file:
 -----------------------------------------------------------
@@ -45,31 +45,31 @@ The following is an example of a valid Sokoban puzzle input file:
 -After reading in a text file, your agent should attempt to find a solution to the puzzle by searching. You must offer a mechanism by which users can choose which search algorithm to apply; how you do this is up to you but must be fully documented. I recommend the use of command line arguments or a simple text prompt.
 
 The types of search algorithms which you must implement are as follows:
-	1) Breadth first search
-	2) Depth first search
-	3) Uniform cost search
-	4) Greedy best first search
-	5) A* search
+    1) Breadth first search
+    2) Depth first search
+    3) Uniform cost search
+    4) Greedy best first search
+    5) A* search
 
 -For the greedy and A* search algorithm, you must implement two heuristic functions. These should also be made available as options to the user. There are several research papers and web sites which discuss possible heuristics; you are welcome to make use of these *AS LONG AS THEY ARE PROPERLY CITED*.
 
 For the sake of simplicity, assume a cost of 1 for each move, with the following exception: for UCS, assume that a move involving a box push costs 2, all other moves still cost 1.
-	
+    
 -Your program should output a solution in the form of a comma separated list of directions:
-	u	up
-	d	down
-	l	left
-	r	right
+    u   up
+    d   down
+    l   left
+    r   right
 
 For example, a solution to the puzzle shown above is: r, r, d, l, d, l, u, u, u
 
 -Your program should also provide users with an option to output statistics on the search process, namely:
-	 a) the number of nodes generated 
-	 b) the number of nodes containing states that were generated previously
-	 c) the number of nodes on the fringe when termination occurs
-	 d) the number of nodes on the explored list (if there is one) when termination occurs
-	 e) the actual run time of the algorithm, expressed in actual time units
-	 
+     a) the number of nodes generated 
+     b) the number of nodes containing states that were generated previously
+     c) the number of nodes on the fringe when termination occurs
+     d) the number of nodes on the explored list (if there is one) when termination occurs
+     e) the actual run time of the algorithm, expressed in actual time units
+     
 -In addition to your code and appropriate documentation, you should submit the output of your five search algorithms, including both the solution and search statistics, when run on *three* different test puzzles.
 
 This means your output should include:
