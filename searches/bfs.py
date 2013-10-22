@@ -1,4 +1,5 @@
 
+from time import sleep
 from copy import deepcopy
 
 def breadth_first_search(board):
@@ -11,42 +12,39 @@ def breadth_first_search(board):
     }
     current_queue = [(deepcopy(board), move) for move in board.moves_available()]
 
-    return iterate_dfs(board, current_queue, records)
+    return iterate_bfs(current_queue, records)
 
 
 def iterate_bfs(current_queue, records):
 
-    next_queue = dfs(current_queue)
-    queue = []
+    result = bfs(current_queue, records)
+    if isinstance(result[0], bool) and result[0] == True:
+        return result[1], result[2]     # records & board
+    else:
+        queue, records = result
+        records['fringe'] = len(queue)
+
+    return iterate_bfs(queue, records)
 
 
-    records['fringe'] = len(next_queue)
-    for board, move in next_queue:
-        board_hash = hash(board)
-        records['node'] += 1
-        if board_hash in records[explored]:        
-            records['repeat'] += 1
-        else:
-            records['explored'].add(board_hash)
-
-        if board.finished():
-            return records
-
-        queue += [(deepcopy(board), next_move) for next_move in board.moves_available()]
-
-
-    return iterate_dfs(queue, records)
-
-
-def bfs(queue):
+def bfs(queue, records):
     new_queue = []
 
     for b, m in queue:
+        records['node'] += 1
         b.move(m)
+
+        if b.finished():
+            return True, records, b
+
         next_moves = b.moves_available()
         if next_moves:
-            for move in next_moves:
-                new_queue += (b, move)
+            if hash(b) not in records['explored']:
+                for move in next_moves:
+                    new_queue.append((deepcopy(b), move))
+                records['explored'].add(hash(b))
+            else:
+                records['repeat'] += 1
 
-    return new_queue
+    return (new_queue, records)
 
