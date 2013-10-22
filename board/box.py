@@ -13,10 +13,15 @@ class Box(object):
         self.state = current_state
 
 
+    def symbol(self):
+        return SYMBOL[self.state]
+
+
     def __str__(self):
         return "{} BOX @ ({},{})".format(self.state, self.x, self.y)
 
 
-    def symbol(self):
-        return SYMBOL[self.state]
+    def __hash__(self):
+        return hash((self.x, self.y, self.state))
+
 

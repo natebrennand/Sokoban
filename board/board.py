@@ -152,7 +152,7 @@ class Board(object):
 
     def add_goal(self, goal):
         """ adds a goal """
-       self.goals[(goal.x, goal.y)] = goal
+        self.goals[(goal.x, goal.y)] = goal
 
     def add_wall(self, wall):
         """ adds a wall to the board """
@@ -161,6 +161,15 @@ class Board(object):
     def deadlock(self):
         unfinished = [b for b in self.boxes.values() if b.status == 'ON']
         pass
+
+    
+    def __hash__(self):
+        return hash((
+            hash(frozenset(self.boxes)),
+            hash(frozenset(self.walls)),
+            hash(frozenset(self.goals)),
+            hash(self.player)
+        ))
 
 
     def __str__(self):
