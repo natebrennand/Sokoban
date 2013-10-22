@@ -44,18 +44,24 @@ def load_map(map_str):
         line = line.replace('\n', '')
         if line:
             for x_index, char in enumerate(line):
+                pos = (x_index, y_index)
                 if char == WALL:
-                    block = Wall((x_index, y_index))
+                    block = Wall(pos)
                     new_board.add_wall(block)
                 elif char == GOAL:
-                    goal = Goal((x_index, y_index))
+                    goal = Goal(pos)
                     new_board.add_goal(goal)
                 elif char in BOX:
-                    box = Box((x_index, y_index), BOX[char])
+                    box = Box(pos, BOX[char])
                     new_board.add_box(box)
+                    if BOX[char] == 'ON':
+                        new_board.add_goal(Goal(pos))
                 elif char in PLAYER:
-                    player = Player((x_index, y_index), PLAYER[char])
+                    player = Player(pos, PLAYER[char])
                     new_board.set_player(player)
+                    if PLAYER[char] == 'ON_GOAL':
+                        new_board.add_goal(Goal(pos))
+
 
     return new_board
 
@@ -65,11 +71,11 @@ class Board(object):
     def __init__(self):
         """ Contructor """
         self.num_lines = 0
-        self.walls = {}
-        self.goals = {}
-        self.boxes = {}
-        self.player = None
-        self.moves = []
+        self.walls = {}     # all the walls
+        self.goals = {}     # all the goals
+        self.boxes = {}     # all the boxes w/ their states
+        self.player = None  # the player with their state
+        self.moves = []     # array of moves made
 
     def move(self, direction):
         """
@@ -84,24 +90,17 @@ class Board(object):
 
         # move box if in path
         if pos1 in self.boxes:
+            del self.boxes[pos1]
+            # create the new box
             self.boxes[pos2] = Box(pos2, None)
             if pos2 in self.goals:
-                del self.goals[pos2]
                 self.boxes[pos2].state = 'ON'
             else:
                 self.boxes[pos2].state = 'OFF'
-            del self.boxes[pos1]
-
-
-        # if player was on goal, re-add to dict
-        if self.player.state == 'ON_GOAL':
-            x, y = self.player.x, self.player.y
-            self.goals[(x, y)] = Goal((x, y))
 
         # if player is now on a goal
         if pos1 in self.goals:
-            self.player = Player(pos1, 'ON_GOAL')
-            del self.goals[pos1]
+            self.player.state = 'ON_GOAL'
         else:
             self.player = Player(pos1, 'NORMAL')
 
@@ -184,9 +183,10 @@ class Board(object):
         for y in range(self.num_lines):
             str_board.append([' ']*20)
 
-        for piece_set in [self.walls, self.goals, self.boxes]:
-            for (pos_x, pos_y) in piece_set.keys():
-                str_board[pos_y][pos_x] = piece_set[(pos_x, pos_y)].symbol()
+        for piece_set in [self.walls, self.boxes, self.goals]:
+            for (x, y) in piece_set.keys():
+                if str_board[y][x] == ' ':
+                    str_board[y][x] = piece_set[(x, y)].symbol()
 
         str_board[self.player.y][self.player.x] = self.player.symbol()
 

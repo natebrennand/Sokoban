@@ -11,7 +11,7 @@ class Goal(object):
 
 
     def __str__(self):
-        return "EMPTY GOAL @ ({},{})".format(self.x, self.y)
+        return "GOAL @ ({},{})".format(self.x, self.y)
 
 
     def __hash__(self):
