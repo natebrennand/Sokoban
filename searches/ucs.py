@@ -8,9 +8,7 @@ def uniform_cost_search(board, steps):
     """
     
     global print_steps
-    print_steps = False
-    if steps:
-        print_steps = True
+    print_steps = True if steps else False
 
     cq = [(deepcopy(board), move, cost) for move, cost in board.moves_available()]
     cq.sort(key=lambda tup: tup[2])  # sort by cost
@@ -25,8 +23,6 @@ def uniform_cost_search(board, steps):
         'explored' : set()
     }
 
-    if print_steps:
-        print 'repeat\tseen'
     return iterate_ucs(cq, cqh, records)
 
 
@@ -37,6 +33,9 @@ def iterate_ucs(queue, qh, records):
     """
 
     global print_steps
+    if print_steps:
+        print 'repeat\tseen'
+
     while True:
         if print_steps:
             print "{}\t{}".format(records['repeat'], len(records['explored']))

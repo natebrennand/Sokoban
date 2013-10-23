@@ -1,11 +1,15 @@
 
 from copy import deepcopy
 
-def breadth_first_search(board):
+def breadth_first_search(board, steps):
     """
     @param board: a Board obj
     @return: return iterate_bfs fn call
     """
+
+    global print_steps
+    print_steps = True if steps else False
+
     records = {
         'node' : 0,
         'repeat' : 0,
@@ -23,9 +27,13 @@ def iterate_bfs(queue, records):
     @param records: a dictionary with various logs that need to be kept
     """
 
-    print 'repeat\tseen'
+    global print_steps
+    if print_steps:
+        print 'repeat\tseen'
+
     while True:
-        print "{}\t{}".format(records['repeat'], len(records['explored']))
+        if print_steps:
+            print "{}\t{}".format(records['repeat'], len(records['explored']))
 
         result = bfs(queue, records)
         if isinstance(result[0], bool):

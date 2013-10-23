@@ -7,8 +7,13 @@ import time
 
 from searches import breadth_first_search as bfs
 from searches import depth_first_search as dfs
+from searches import uniform_cost_search as ucs
 
-searches = [bfs, dfs]
+searches = [
+    (bfs, 'breadth first search'),
+    (dfs, 'depth first search'),
+    (ucs, 'uniform cost search'),
+]
 
 def reportit(f):
 
@@ -19,6 +24,7 @@ def reportit(f):
         runtime = (time.time()-t_start)
 
         print
+        print 'Data for {}'.format(kw['name'])
         print ','.join(board.moves)
         print "a)\t{}\tNodes generated".format(report['node'])
         print "b)\t{}\tNodes repeated".format(report['repeat'])
@@ -30,8 +36,8 @@ def reportit(f):
 
 
 @reportit
-def run_search(board, search):
-    results, board = search(board)
+def run_search(board, search, steps, name=None):
+    results, board = search(board, steps)
     return results, board
 
 
@@ -50,6 +56,8 @@ def get_args():
     parser.add_argument('--test', dest='test', action='store_const',
                         const=True, default=False,
                         help='Run the suite of tests')
+    parser.add_argument('--steps', dest='steps', action='store_const',
+                        const=True, default=False)
     args = parser.parse_args()
 
     if not args.test and not args.puzzle:
@@ -65,8 +73,8 @@ if __name__ == '__main__':
 
     if args.puzzle:
         board = load_map(get_map_str(args.puzzle))
-        for search in searches:
-            run_search(deepcopy(board), search)
+        for search, search_name in searches:
+            run_search(deepcopy(board), search, args.steps, name=search_name)
 
     elif args.test:
         print 'running tests...'

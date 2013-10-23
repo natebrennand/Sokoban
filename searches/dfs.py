@@ -1,21 +1,22 @@
 
 from copy import deepcopy
 
-def depth_first_search(board):
+def depth_first_search(board, steps):
     """
     @param board: a Board obj
     @return: return iterate_bfs fn call
     """
-    visited_nodes = set()
+
+    global print_steps
+    print_steps = True if steps else False
     records = {
         'node' : 0,
         'repeat' : 0,
         'fringe' : 0,
-        'explored' : visited_nodes,
+        'explored' : set()
     }
     current_queue = [(deepcopy(board), move) for (move, cost) in board.moves_available()]
 
-    print 'repeat\tseen'
     return iterate_dfs(current_queue, records)
 
 
@@ -25,9 +26,13 @@ def iterate_dfs(queue, records):
     @param records: a dictionary with various logs that need to be kept
     """
 
-    while True:
-        print "{}\t{}".format(records['repeat'], len(records['explored']))
+    global print_steps
+    if print_steps:
+        print 'repeat\tseen'
 
+    while True:
+        if print_steps:
+            print "{}\t{}".format(records['repeat'], len(records['explored']))
         result = dfs(queue, records)
         if isinstance(result[0], bool) and result[0] == True:
             return result[1], result[2]     # records & board
