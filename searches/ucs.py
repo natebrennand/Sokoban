@@ -7,7 +7,6 @@ def uniform_cost_search(board, steps):
     @return: return iterate_bfs fn call
     """
     
-    global print_steps
     print_steps = True if steps else False
 
     cq = [(deepcopy(board), move, cost) for move, cost in board.moves_available()]
@@ -23,16 +22,15 @@ def uniform_cost_search(board, steps):
         'explored' : set()
     }
 
-    return iterate_ucs(cq, cqh, records)
+    return iterate_ucs(cq, cqh, records, print_steps=steps)
 
 
-def iterate_ucs(queue, qh, records):
+def iterate_ucs(queue, qh, records, print_steps=False):
     """
     @param queue: A queue of boards & their next slated move
     @param records: a dictionary with various logs that need to be kept
     """
 
-    global print_steps
     if print_steps:
         print 'repeat\tseen'
 
@@ -64,7 +62,7 @@ def ufs(queue, queue_hash, records):
         return True, records, board
 
     new_moves = board.moves_available()
-    new_queue = [(deepcopy(board), m, c+cost) for (m, c) in new_moves]
+    new_queue = [(deepcopy(board), mv, c+cost) for (mv, c) in new_moves]
     to_be_added = []
     to_be_replaced = []
 

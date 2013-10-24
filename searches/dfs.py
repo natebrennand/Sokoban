@@ -6,9 +6,6 @@ def depth_first_search(board, steps):
     @param board: a Board obj
     @return: return iterate_bfs fn call
     """
-
-    global print_steps
-    print_steps = True if steps else False
     records = {
         'node' : 0,
         'repeat' : 0,
@@ -17,16 +14,15 @@ def depth_first_search(board, steps):
     }
     current_queue = [(deepcopy(board), move) for (move, cost) in board.moves_available()]
 
-    return iterate_dfs(current_queue, records)
+    return iterate_dfs(current_queue, records, print_steps=steps)
 
 
-def iterate_dfs(queue, records):
+def iterate_dfs(queue, records, print_steps=False):
     """
     @param queue: A queue of boards & their next slated move
     @param records: a dictionary with various logs that need to be kept
     """
 
-    global print_steps
     if print_steps:
         print 'repeat\tseen'
 

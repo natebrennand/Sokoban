@@ -10,8 +10,8 @@ from searches import uniform_cost_search as ucs
 
 searches = [
     (bfs, 'breadth first search'),
-    (dfs, 'depth first search'),
-    (ucs, 'uniform cost search'),
+    #(dfs, 'depth first search'),
+    #(ucs, 'uniform cost search'),
 ]
 
 def reportit(f):
@@ -42,7 +42,7 @@ def reportit(f):
 @reportit
 def run_search(cli_args=None, puzzle_path=None, search=None, search_name=None):
     board = load_map(get_map_str(puzzle_path))
-    results, board = search(board, args.steps)
+    results, board = search(board, print_steps=args.steps)
     return results, board
 
 
@@ -87,7 +87,7 @@ if __name__ == '__main__':
         for map_path in ['easy_1', 'easy_3', 'moderate_1']:
             for search, search_name in searches:
                 run_search( cli_args=args,
-                    puzzle_path='sokoban_boards/'+map_path,
+                    puzzle_path='sokoban_boards/{}.txt'.format(map_path),
                     search=search,
                     search_name=search_name)
 

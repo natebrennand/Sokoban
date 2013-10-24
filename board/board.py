@@ -90,6 +90,8 @@ class Board(object):
         self.player = pos1              # reset player position
         self.moves.append(direction)    # log the move
 
+        return self
+
 
     def finished(self):
         """
