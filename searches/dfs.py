@@ -4,7 +4,14 @@ from copy import deepcopy
 def depth_first_search(board, print_steps=None):
     """
     @param board: a Board obj
-    @return: return iterate_bfs fn call
+    @param print_steps: flag to print intermediate steps
+
+    @return (records, board)
+        records: a dictionary keeping track of necessary statistics
+        board: a copy of the board at the finished state.
+            Contains an array of all moves performed.
+
+    Performs a depth first search on the sokoban board. Follows the
     """
     records = {
         'node' : 0,
@@ -26,7 +33,6 @@ def depth_first_search(board, print_steps=None):
             print "{}\t{}".format(records['repeat'], len(records['explored']))
 
         if not board_queue: # if empty queue, fail
-            print node_board
             print records
             raise Exception('Solution not found.')
 
@@ -44,6 +50,7 @@ def depth_first_search(board, print_steps=None):
             for direction, cost in choices:
                 records['node'] += 1
                 child_board = deepcopy(node_board).move(direction)
+
                 if hash(child_board) not in records['explored'] and child_board not in board_queue:
                     board_queue.insert(0, child_board)
                 else:

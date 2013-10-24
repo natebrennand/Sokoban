@@ -10,6 +10,9 @@ def breadth_first_search(board, print_steps=False):
         records: a dictionary keeping track of necessary statistics
         board: a copy of the board at the finished state.
             Contains an array of all moves performed.
+
+    Performs a breadth first search on the sokoban board. Follows the
+        implementation on pg 83 of AIMA closely.
     """
     records = {
         'node' : 0,
