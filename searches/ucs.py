@@ -1,88 +1,57 @@
 
 from copy import deepcopy
+from priority_cost_queue import Priority_Cost_Queue
 
-def uniform_cost_search(board, steps):
+def uniform_cost_search(board, print_steps=False):
     """
-    @param board: a Board obj
-    @return: return iterate_bfs fn call
+    @param board: a Board object
+    @param print_steps: flag to print intermediate steps
+
+    @return (records, board)
+        records: a dictionary keeping track of necessary statistics
+        board: a copy of the board at the finished state.
+            Contains an array of all moves performed.
+
+    Performs a uniform cost search on the sokoban board. Follows the
+        implementation on pg 84 of AIMA closely.
     """
-    
-    print_steps = True if steps else False
-
-    cq = [(deepcopy(board), move, cost) for move, cost in board.moves_available()]
-    cq.sort(key=lambda tup: tup[2])  # sort by cost
-    cqh = {}
-    for b,m,c in cq:
-        cqh[hash((hash(b),m))] = c
-
     records = {
-        'node' : len(cq),
+        'node' : 0,
         'repeat' : 0,
         'fringe' : 0,
         'explored' : set()
     }
 
-    return iterate_ucs(cq, cqh, records, print_steps=steps)
+    if board.finished():    # check if initial state is complete
+        return records, board
 
-
-def iterate_ucs(queue, qh, records, print_steps=False):
-    """
-    @param queue: A queue of boards & their next slated move
-    @param records: a dictionary with various logs that need to be kept
-    """
-
-    if print_steps:
-        print 'repeat\tseen'
+    board_queue = Priority_Cost_Queue()  # initialize queue
+    board_queue.push(0, board)
+    records['node'] += 1
 
     while True:
-        if print_steps:
-            print "{}\t{}".format(records['repeat'], len(records['explored']))
 
-        result = ufs(queue, qh, records)
-        if isinstance(result[0], bool) and result[0] == True:
-            return result[1], result[2]     # records & board
-        else:
-            queue, records = result
-            records['fringe'] = len(queue)
+        records['fringe'] = len(board_queue)
+        if not board_queue:     # fail if no options left
+            print records
+            raise Exception('Solution not found.')
 
+        node_cost, node_board = board_queue.pop()
 
-def ufs(queue, queue_hash, records):
-    """
-    @param queue: The queue of boards & moves to be evalutated
-    @param records: records to be updated
+        if node_board.finished():   # return if solved
+            return records, node_board
+        records['explored'].add(hash(node_board))   # log board
 
-    @return: new_queue, records: updated versions of each
-    """
-    new_queue = []
-    board, m, cost = queue.pop(0)
-    del queue_hash[hash((hash(board),m))]
-    board.move(m)
-    records['explored'].add(hash(board))
-    if board.finished():
-        return True, records, board
+        for direction, cost in node_board.moves_available():
 
-    new_moves = board.moves_available()
-    new_queue = [(deepcopy(board), mv, c+cost) for (mv, c) in new_moves]
-    to_be_added = []
-    to_be_replaced = []
+            child_board = deepcopy(node_board).move(direction) # copy & move
+            records['node'] += 1
 
-    for b,m,c in new_queue:
-        records['node'] += 1
-        move_hash = hash((hash(b),m))
-        if move_hash in queue_hash:
-            records['repeat'] += 1
-            if queue_hash[move_hash] > c and move_hash not in records['explored']:
-                queue_hash[move_hash] = c
-                to_be_replaced.append((b,m,c))
-        else:
-            queue_hash[move_hash] = c
-            to_be_added.append((b,m,c))
-
-    for index, (b,m,c) in enumerate(queue):
-        for rb,rm,rc in to_be_replaced:
-            if hash((hash(b),m)) == hash((hash(rb),rm)):
-                queue[index] = (rb,rm,rc)
-    queue = queue + to_be_added
-    queue.sort(key=lambda tup: tup[2])
-
-    return queue, records
+            if hash(child_board) not in records['explored']:    # if not explored
+                if not child_board in board_queue:              # if not in queue
+                    board_queue.push(node_cost+cost, child_board)
+                else:                                           # check if cost can be made lower
+                    board_queue.update_cost(node_cost+cost, child_board)
+                    records['repeat'] += 1
+            else:                                               # log repeat if already explored
+                records['repeat'] += 1

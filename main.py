@@ -11,7 +11,7 @@ from searches import uniform_cost_search as ucs
 searches = [
     (bfs, 'breadth first search'),
     (dfs, 'depth first search'),
-    #(ucs, 'uniform cost search'),
+    (ucs, 'uniform cost search'),
 ]
 
 def reportit(f):

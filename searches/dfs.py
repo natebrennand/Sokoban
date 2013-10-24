@@ -3,7 +3,7 @@ from copy import deepcopy
 
 def depth_first_search(board, print_steps=None):
     """
-    @param board: a Board obj
+    @param board: a Board object
     @param print_steps: flag to print intermediate steps
 
     @return (records, board)

@@ -3,7 +3,7 @@ from copy import deepcopy
 
 def breadth_first_search(board, print_steps=False):
     """
-    @param board: a Board obj
+    @param board: a Board object
     @param print_steps: flag to print intermediate steps
 
     @return (records, board)
@@ -27,6 +27,7 @@ def breadth_first_search(board, print_steps=False):
         return records, board
 
     board_queue = [board]   # initialize queue
+    records['node'] += 1
 
     while True:
         if print_steps:
