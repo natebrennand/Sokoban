@@ -7,11 +7,13 @@ import time
 from searches import breadth_first_search as bfs
 from searches import depth_first_search as dfs
 from searches import uniform_cost_search as ucs
+from searches import greedy_best_first_search as gbfs
 
 searches = [
     (bfs, 'breadth first search'),
     (dfs, 'depth first search'),
     (ucs, 'uniform cost search'),
+    (gbfs, 'greedy best first search'),
 ]
 test_maps = [
     'easy_1',

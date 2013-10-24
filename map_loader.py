@@ -20,6 +20,7 @@ def load_map(map_str):
             # : wall
             $ : box off goal
             * : box on goal
+            . : empty goal
     """
     new_board = Board()
     

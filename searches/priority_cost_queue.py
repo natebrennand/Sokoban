@@ -7,25 +7,29 @@ class PriorityCostQueue(object):
 
 
     def push(self, cost, item):
+        if hash(item) in self.roster:
+            print item
+            print 'ERROR'
+            raise Exception('Repeat item being added to priority queue')
+
         self.roster[hash(item)] = cost
 
-        if len(self.queue) == 0:
-            self.queue = [(cost, item)]
-            return
-
-        dont_add = False
+        add_it = True
         for index, (node_cost, node) in enumerate(self.queue):
             if cost <= node_cost:
                 self.queue.insert(index, (cost, item))
-                dont_add = True
+                add_it = False
                 break
-        if not dont_add:
+        if add_it:
             self.queue.append((cost, item))
 
 
     def pop(self, index=0):
         cost, item = self.queue.pop(index)
         del self.roster[hash(item)]
+
+        assert len(self.queue) == len(self.roster.keys())
+
         return cost, item
 
 

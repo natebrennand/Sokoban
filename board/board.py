@@ -51,6 +51,24 @@ class Board(object):
         return self
 
 
+    def manhattan(self):
+        """
+        A naive heuristic. Returns the sum of the shortest distance between the
+        player with an unplaced box and the distances between each box and their
+        nearest goals
+        """
+        unplaced_boxes = self.boxes.difference(self.goals)
+        unfilled_goals = self.goals.difference(self.boxes)
+        if not unplaced_boxes:
+            return 0
+
+        player_dist = min([self.player.dist(box) for box in unplaced_boxes])
+
+        box_distances = sum([min([box.dist(goal) for goal in unfilled_goals]) for box in unplaced_boxes])
+
+        return player_dist + box_distances
+
+
     def finished(self):
         """
         Return  True: if all boxes are on goals.
