@@ -1,30 +1,32 @@
 
 from position import Position
 
-WALL = set(['#'])
-PLAYER = set(['@', '+'])
-GOAL = set(['.', '+', '*'])
-BOX = ['$','*']
+WALL    = set(['#'])
+PLAYER  = set(['@', '+'])
+GOAL    = set(['.', '+', '*'])
+BOX     = set(['$','*'])
 
 DIRECTION = {
     'u' : Position(0,-1),
-    'd' : Position(0,1),
-    'r' : Position(1,0),
+    'd' : Position(0, 1),
+    'r' : Position(1, 0),
     'l' : Position(-1,0)
 }
 
 def load_map(map_str):
     """
     @param map_str: A file containing an ascii sokoban puzzle.
+    @return: a Board obj representing the map
+
+    Constructs a sokoban board object and returns it.
+
+    Map specifications
         1st line contains the # of lines.
             @ : player on ground
             + : player on goal
             # : wall
             $ : box off goal
             * : box on goal
-    @return: a Board obj representing the map
-
-    Constructs a sokoban board object and returns it.
     """
     new_board = Board()
     
@@ -50,6 +52,16 @@ def load_map(map_str):
 
 
 class Board(object):
+    """
+    Keeps track of all elements of a board:
+        walls, goals, boxes, the player and moves
+
+    - moves_available: returns which moves are possible for the player
+        in it's current position
+    - move: moves the player in the specified direction and adjusts
+        other elements accordingly
+    - hash: only depends on the placement of boxes and the player.
+    """
 
     def __init__(self):
         """ Contructor """
@@ -81,17 +93,21 @@ class Board(object):
 
     def finished(self):
         """
-        Return True if all boxes are on goals.
-        False otherwise.
+        Return  True: if all boxes are on goals.
+                False: Otherwise
         """
-        if not self.goals - self.boxes:     # if no overlap
+        if not self.goals.difference(self.boxes):     # if no overlap
             return True
         return False
 
 
     def moves_available(self):
         """
-        Returns what moves are available in [u,r,d,l].
+        @return array (move, cost)
+            move: available moves in [u,r,d,l]
+            cost:   2 if pushing a box,
+                    1 otherwise
+
         Checks that moves that involve pushing a block are possible given the
         placement of walls.
         """
@@ -99,7 +115,9 @@ class Board(object):
         possible_moves = []
 
         for direction in theoretical_moves:
+            # position the player would be in
             new_pos     = self.player+DIRECTION[direction]
+            # position the box the player pushes would be
             next_pos    = self.player+DIRECTION[direction].mult(2)
 
             if new_pos in self.walls:   # blocked by walls
@@ -140,9 +158,9 @@ class Board(object):
 
     
     def __hash__(self):
+        """ hashes the board object """
         return hash((
             hash(frozenset(self.boxes)),
-            hash(frozenset(self.walls)),
             hash(self.player)
         ))
 
@@ -153,25 +171,24 @@ class Board(object):
         """
         str_board = []
         for y in range(self.num_lines):
-            str_board.append([' ']*20)
+            str_board.append([' ']*20)  # 20 is an abitrary width
 
-        for wall in self.walls:
+        for wall in self.walls:                         # walls
             str_board[wall.y][wall.x] = '#'
 
-        for box in self.boxes.difference(self.goals):
+        for box in self.boxes.difference(self.goals):   # boxes - goals
             str_board[box.y][box.x] = '$'
 
-        for box in self.boxes.union(self.goals):
+        for box in self.goals.union(self.boxes):        # boxes & goals
             str_board[box.y][box.x] = '*'
 
-        for goal in self.goals.difference(self.boxes):
+        for goal in self.goals.difference(self.boxes):  # goals - boxes
             str_board[goal.y][goal.x] = '.'
 
-        if self.player in self.goals:
+        if self.player in self.goals:                   # player on goal
             str_board[self.player.y][self.player.x] = '@'
-        else:
+        else:                                           # player off goal
             str_board[self.player.y][self.player.x] = '+'
 
-        str_board = [''.join(line) for line in str_board]
-        return '\n'.join(str_board)
+        return '\n'.join([''.join(line) for line in str_board])
 
