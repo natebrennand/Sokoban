@@ -1,4 +1,5 @@
-class Priority_Cost_Queue(object):
+
+class PriorityCostQueue(object):
 
     def __init__(self):
         self.queue = []
@@ -32,7 +33,6 @@ class Priority_Cost_Queue(object):
         if cost < self.roster[hash(item)]:
             for index, (element_cost, element) in enumerate(self.queue):
                 if hash(item) == hash(element):
-                    print item, element
                     self.queue[index][0] = cost
                     self.roster[hash(item)] = cost
 

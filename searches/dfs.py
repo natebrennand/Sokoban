@@ -11,7 +11,8 @@ def depth_first_search(board, print_steps=None):
         board: a copy of the board at the finished state.
             Contains an array of all moves performed.
 
-    Performs a depth first search on the sokoban board. Follows the
+    Performs a depth first search on the sokoban board.
+    Doesn't add duplicate nodes to the stack so as to prevent looping.
     """
     records = {
         'node' : 0,

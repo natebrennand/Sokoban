@@ -1,6 +1,6 @@
 
 from copy import deepcopy
-from priority_cost_queue import Priority_Cost_Queue
+from priority_cost_queue import PriorityCostQueue
 
 def uniform_cost_search(board, print_steps=False):
     """
@@ -25,7 +25,7 @@ def uniform_cost_search(board, print_steps=False):
     if board.finished():    # check if initial state is complete
         return records, board
 
-    board_queue = Priority_Cost_Queue()  # initialize queue
+    board_queue = PriorityCostQueue()  # initialize queue
     board_queue.push(0, board)
     records['node'] += 1
 

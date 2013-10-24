@@ -1,5 +1,5 @@
 
-from board import load_map
+from map_loader import load_map
 from sys import exit
 import argparse
 import time
@@ -12,6 +12,11 @@ searches = [
     (bfs, 'breadth first search'),
     (dfs, 'depth first search'),
     (ucs, 'uniform cost search'),
+]
+test_maps = [
+    'easy_1',
+    'easy_3',
+    'moderate_1'
 ]
 
 def reportit(f):
@@ -73,25 +78,30 @@ def get_args():
     return args
 
 
+def test(args):
+    for map_path in test_maps:
+        print '{0}\n\tTesting on map {1}\n{0}'.format('-'*64, map_path)
+
+        for search, search_name in searches:
+            run_search( cli_args=args,
+                puzzle_path='sokoban_boards/{}.txt'.format(map_path),
+                search=search,
+                search_name=search_name)
+
+
+def puzzle(args):
+    for search, search_name in searches:
+        run_search(cli_args=args,
+            puzzle_path=args.puzzle,
+            search=search,
+            search_name=search_name)
+
+
 if __name__ == '__main__':
     args = get_args()
 
     if args.puzzle:
-        for search, search_name in searches:
-            run_search(cli_args=args,
-                puzzle_path=args.puzzle,
-                search=search,
-                search_name=search_name)
+        puzzle(args)
 
     elif args.test:
-        for map_path in ['easy_1', 'easy_3', 'moderate_1']:
-            print '----------------------------------------------------------------'
-            print 'Testing on map {}'.format(map_path)
-            print '----------------------------------------------------------------'
-
-            for search, search_name in searches:
-                run_search( cli_args=args,
-                    puzzle_path='sokoban_boards/{}.txt'.format(map_path),
-                    search=search,
-                    search_name=search_name)
-
+        test(args)
