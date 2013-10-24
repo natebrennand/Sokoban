@@ -6,7 +6,10 @@ def breadth_first_search(board, print_steps=False):
     @param board: a Board obj
     @param print_steps: flag to print intermediate steps
 
-    @return 
+    @return (records, board)
+        records: a dictionary keeping track of necessary statistics
+        board: a copy of the board at the finished state.
+            Contains an array of all moves performed.
     """
     records = {
         'node' : 0,
@@ -17,21 +20,22 @@ def breadth_first_search(board, print_steps=False):
     if print_steps:
         print 'repeat\tseen'
 
-    if board.finished():
+    if board.finished():    # check if initial state is complete
         return records, board
 
-    board_queue = [board]
+    board_queue = [board]   # initialize queue
 
     while True:
         if print_steps:
             print "{}\t{}".format(records['repeat'], len(records['explored']))
 
-        if not board_queue:
+        if not board_queue: # fail if no options left
+            print records
             raise Exception('Solution not found.')
 
-        node_board = board_queue.pop(0)
-        records['explored'].add(hash(node_board))
-        records['fringe'] = len(board_queue)
+        node_board = board_queue.pop(0)             # move to next node in array
+        records['explored'].add(hash(node_board))   # add hash to explored
+        records['fringe'] = len(board_queue)        # 
 
         for direction, cost in node_board.moves_available():
             # copy the board and perform the move

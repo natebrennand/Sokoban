@@ -1,7 +1,7 @@
 
 from copy import deepcopy
 
-def depth_first_search(board, steps):
+def depth_first_search(board, print_steps=None):
     """
     @param board: a Board obj
     @return: return iterate_bfs fn call
@@ -12,64 +12,39 @@ def depth_first_search(board, steps):
         'fringe' : 0,
         'explored' : set()
     }
-    current_queue = [(deepcopy(board), move) for (move, cost) in board.moves_available()]
-
-    return iterate_dfs(current_queue, records, print_steps=steps)
-
-
-def iterate_dfs(queue, records, print_steps=False):
-    """
-    @param queue: A queue of boards & their next slated move
-    @param records: a dictionary with various logs that need to be kept
-    """
 
     if print_steps:
         print 'repeat\tseen'
 
+    if board.finished():    # check if initial state is complete
+        return records, board
+
+    board_queue = [board]   # initialize queue
+
     while True:
         if print_steps:
             print "{}\t{}".format(records['repeat'], len(records['explored']))
-        result = dfs(queue, records)
-        if isinstance(result[0], bool) and result[0] == True:
-            return result[1], result[2]     # records & board
-        else:
-            new_queue, records = result
-            records['fringe'] = len(queue)
 
-        queue = new_queue + queue
+        if not board_queue: # if empty queue, fail
+            print node_board
+            print records
+            raise Exception('Solution not found.')
 
-    print 'failure'
+        node_board = board_queue.pop(0)
+        records['explored'].add(hash(node_board))
+        records['fringe'] = len(board_queue)
 
+        if node_board.finished():   # if finished, return
+            return records, node_board
 
-def dfs(queue, records):
-    """
-    @param queue: The queue of boards & moves to be evalutated
-    @param records: records to be updated
-
-    @return: new_queue, records: updated versions of each
-    """
-    new_queue = []
-    in_queue = set([])
-
-    # iterates over boards w/ their moves
-    for b, m in queue:
-        records['node'] += 1
-        b.move(m)   # performs move
-        if b.finished():    # checks if done
-            return True, records, b
-
-        next_moves = [move for move,cost in b.moves_available()]
-
-        if next_moves:
-            if hash(b) not in records['explored']:
-                for move in next_moves:
-                    move_hash = hash((hash(b),move))
-                    if move_hash not in in_queue:
-                        new_queue.insert(0, (deepcopy(b), move))
-                        in_queue.add(move_hash)
-                records['explored'].add(hash(b))
-            else:
-                records['repeat'] += 1
-
-    return (new_queue, records)
-
+        choices = node_board.moves_available()
+        if not choices:     # if no options
+            board_queue.pop(0)    
+        else:               # regular
+            for direction, cost in choices:
+                records['node'] += 1
+                child_board = deepcopy(node_board).move(direction)
+                if hash(child_board) not in records['explored'] and child_board not in board_queue:
+                    board_queue.insert(0, child_board)
+                else:
+                    records['repeat'] += 1

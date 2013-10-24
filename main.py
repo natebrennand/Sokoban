@@ -10,7 +10,7 @@ from searches import uniform_cost_search as ucs
 
 searches = [
     (bfs, 'breadth first search'),
-    #(dfs, 'depth first search'),
+    (dfs, 'depth first search'),
     #(ucs, 'uniform cost search'),
 ]
 
@@ -85,6 +85,10 @@ if __name__ == '__main__':
 
     elif args.test:
         for map_path in ['easy_1', 'easy_3', 'moderate_1']:
+            print '----------------------------------------------------------------'
+            print 'Testing on map {}'.format(map_path)
+            print '----------------------------------------------------------------'
+
             for search, search_name in searches:
                 run_search( cli_args=args,
                     puzzle_path='sokoban_boards/{}.txt'.format(map_path),
