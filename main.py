@@ -1,6 +1,5 @@
 
 from board import load_map
-from copy import deepcopy
 from sys import exit
 import argparse
 import time
@@ -23,21 +22,27 @@ def reportit(f):
         report, board = f(*args, **kw)
         runtime = (time.time()-t_start)
 
-        print
-        print 'Data for {}'.format(kw['name'])
-        print ','.join(board.moves)
-        print "a)\t{}\tNodes generated".format(report['node'])
-        print "b)\t{}\tNodes repeated".format(report['repeat'])
-        print 'c)\t{}\tNodes at the fringe of the search'.format(report['fringe'])
-        print 'd)\t{}\tnodes explored'.format(len(report['explored']))
-        print 'e)\t{}\t'.format(runtime)
-
+        print """Data for {search_name}\n{moves}
+        a)\t{generated}\tNodes generated
+        b)\t{repeated}\tNodes repeated
+        c)\t{fringe}\tNodes at the fringe of the search
+        d)\t{explored}\tnodes explored
+        e)\t{runtime} seconds
+        """.format( search_name = kw['search_name'],
+                    moves       = ','.join(board.moves),
+                    generated   = report['node'],
+                    repeated    = report['repeat'],
+                    fringe      = report['fringe'],
+                    explored    = len(report['explored']),
+                    runtime     = runtime
+        )
     return report
 
 
 @reportit
-def run_search(board, search, steps, name=None):
-    results, board = search(board, steps)
+def run_search(cli_args=None, puzzle_path=None, search=None, search_name=None):
+    board = load_map(get_map_str(puzzle_path))
+    results, board = search(board, args.steps)
     return results, board
 
 
@@ -72,10 +77,17 @@ if __name__ == '__main__':
     args = get_args()
 
     if args.puzzle:
-        board = load_map(get_map_str(args.puzzle))
         for search, search_name in searches:
-            run_search(deepcopy(board), search, args.steps, name=search_name)
+            run_search(cli_args=args,
+                puzzle_path=args.puzzle,
+                search=search,
+                search_name=search_name)
 
     elif args.test:
-        print 'running tests...'
-        pass
+        for map_path in ['easy_1', 'easy_3', 'moderate_1']:
+            for search, search_name in searches:
+                run_search( cli_args=args,
+                    puzzle_path='sokoban_boards/'+map_path,
+                    search=search,
+                    search_name=search_name)
+
