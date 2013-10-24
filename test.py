@@ -1,5 +1,7 @@
+
 from copy import deepcopy, copy
-from board import load_map
+from board import load_map, Position
+from sys import exit
 
 def make_move(current_board, move):
     current_board.move(move)
@@ -12,6 +14,18 @@ with open('sokoban_boards/easy_1.txt') as f:
     map_str = f.read()
 
 new_board = load_map(map_str)
+
+print new_board
+
+print new_board.moves_available()
+new_board.add_player((1,1))
+print new_board.moves_available()
+
+print Position(0,0) in new_board.walls
+
+exit(0)
+
+
 
 # test moves_available
 assert new_board.moves_available() == ['u','r','d','l']

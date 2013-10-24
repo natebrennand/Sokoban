@@ -1,26 +1,17 @@
 
-WALL = '#'
-PLAYER = {
-    '@' : 'NORMAL',
-    '+' : 'ON_GOAL'
-}
-GOAL = '.'
-BOX = {
-    '$' : 'OFF',
-    '*' : 'ON'
-}
+from position import Position
+
+WALL = set(['#'])
+PLAYER = set(['@', '+'])
+GOAL = set(['.', '+', '*'])
+BOX = ['$','*']
+
 DIRECTION = {
-    'u' : (0,-1),
-    'd' : (0,1),
-    'r' : (1,0),
-    'l' : (-1,0)
+    'u' : Position(0,-1),
+    'd' : Position(0,1),
+    'r' : Position(1,0),
+    'l' : Position(-1,0)
 }
-
-from box    import Box
-from wall   import Wall
-from player import Player
-from goal   import Goal
-
 
 def load_map(map_str):
     """
@@ -40,28 +31,20 @@ def load_map(map_str):
     map_lines = map_str.split('\n')
     new_board.num_lines = int(map_lines[0].strip())
 
-    for y_index, line in enumerate(map_lines[1:]):
+    for y, line in enumerate(map_lines[1:]):
         line = line.replace('\n', '')
         if line:
-            for x_index, char in enumerate(line):
-                pos = (x_index, y_index)
-                if char == WALL:
-                    block = Wall(pos)
-                    new_board.add_wall(block)
-                elif char == GOAL:
-                    goal = Goal(pos)
-                    new_board.add_goal(goal)
-                elif char in BOX:
-                    box = Box(pos, BOX[char])
-                    new_board.add_box(box)
-                    if BOX[char] == 'ON':
-                        new_board.add_goal(Goal(pos))
-                elif char in PLAYER:
-                    player = Player(pos, PLAYER[char])
-                    new_board.set_player(player)
-                    if PLAYER[char] == 'ON_GOAL':
-                        new_board.add_goal(Goal(pos))
+            for x, char in enumerate(line):
+                pos = (x, y)
 
+                if char in WALL:
+                    new_board.add_wall(pos)
+                if char in GOAL:
+                    new_board.add_goal(pos)
+                if char in BOX:
+                    new_board.add_box(pos)
+                if char in PLAYER:
+                    new_board.add_player(pos)
 
     return new_board
 
@@ -71,11 +54,11 @@ class Board(object):
     def __init__(self):
         """ Contructor """
         self.num_lines = 0
-        self.walls = {}     # all the walls
-        self.goals = {}     # all the goals
-        self.boxes = {}     # all the boxes w/ their states
-        self.player = None  # the player with their state
-        self.moves = []     # array of moves made
+        self.walls = set()      # all the walls
+        self.goals = set()      # all the goals
+        self.boxes = set()      # all the boxes w/ their states
+        self.player = None      # the player with their state
+        self.moves = []         # array of moves made
 
 
     def move(self, direction):
@@ -85,22 +68,15 @@ class Board(object):
 
         Adjusts the board object given a movement.
         """
-        x_diff, y_diff = DIRECTION[direction]
-        pos1 = (self.player.x + x_diff, self.player.y + y_diff)
-        pos2 = (self.player.x + 2*x_diff, self.player.y + 2*y_diff)
+        pos1 = self.player + DIRECTION[direction]
+        pos2 = self.player + DIRECTION[direction].mult(2)
 
-        # move box if in path
-        if pos1 in self.boxes:
-            del self.boxes[pos1]
-            new_state = 'ON' if pos2 in self.goals else 'OFF'
-            self.boxes[pos2] = Box(pos2, new_state)
+        if pos1 in self.boxes:          # move box if in path
+            self.boxes.remove(pos1)
+            self.boxes.add(pos2)
 
-        # reset player position
-        player_state = 'ON_GOAL' if pos1 in self.goals else 'NORMAL'
-        self.player = Player(pos1, player_state)
-
-        # log the move
-        self.moves.append(direction)
+        self.player = pos1              # reset player position
+        self.moves.append(direction)    # log the move
 
 
     def finished(self):
@@ -108,10 +84,9 @@ class Board(object):
         Return True if all boxes are on goals.
         False otherwise.
         """
-        for box in self.boxes.values():
-            if box.state == 'OFF':
-                return False
-        return True
+        if not self.goals - self.boxes:     # if no overlap
+            return True
+        return False
 
 
     def moves_available(self):
@@ -120,52 +95,56 @@ class Board(object):
         Checks that moves that involve pushing a block are possible given the
         placement of walls.
         """
-        x, y = self.player.x, self.player.y
-        moves = [('u', 1, (0, -1)), ('r', 1, (1, 0)),
-                 ('d', 1, (0, 1)), ('l', 1, (-1, 0))]
+        theoretical_moves = ['u', 'r', 'd', 'l']
+        possible_moves = []
 
-        move_options = [(i, m, p) for i, (m, c, p) in enumerate(moves)]
-        for index, move, (pos_x, pos_y) in reversed(move_options):
-            # if a wall blocks the path
-            if (x+pos_x, y+pos_y) in self.walls:
-                del moves[index]
-            # if the box's movement is blocked by a wall/box
-            elif (x+pos_x, y+pos_y) in self.boxes:
-                next_pos = (x+2*pos_x, y+2*pos_y)
-                if next_pos in self.walls or next_pos in self.boxes:
-                        del moves[index]
-                else:
-                    moves[index] = (move, 2, (pos_x, pos_y))
+        for direction in theoretical_moves:
+            new_pos     = self.player+DIRECTION[direction]
+            next_pos    = self.player+DIRECTION[direction].mult(2)
 
-            if not moves:   # no moves available, stop iterating
-                return []
+            if new_pos in self.walls:   # blocked by walls
+                continue
+            elif new_pos in self.boxes: # pushing a box
+                if next_pos in self.walls.union(self.boxes):   # into a wall/box
+                    continue
+                possible_moves.append((direction, 2))
+            else:                       # regular movement
+                possible_moves.append((direction, 1))
 
-        return [(move, cost) for (move, cost, pos) in moves]
+        return possible_moves
 
 
-    def set_player(self, player):
+    def add_player(self, (x, y)):
         """ sets the player """
-        self.player = player
+        self.player = Position(x,y)
 
-    def add_box(self, box):
+
+    def add_box(self, (x, y)):
         """ adds a box """
-        self.boxes[(box.x, box.y)] = box
+        self.boxes.add(Position(x,y))
 
-    def add_goal(self, goal):
+
+    def add_goal(self, (x, y)):
         """ adds a goal """
-        self.goals[(goal.x, goal.y)] = goal
+        self.goals.add(Position(x,y))
 
-    def add_wall(self, wall):
+
+    def add_wall(self, (x, y)):
         """ adds a wall to the board """
-        self.walls[(wall.x, wall.y)] = wall
+        self.walls.add(Position(x,y))
+
 
     def deadlock(self):
-        unfinished = [b for b in self.boxes.values() if b.status == 'ON']
+        """ TO BE IMPLEMENTED/USED """
         pass
 
     
     def __hash__(self):
-        return hash_board(self.boxes, self.walls, self.player)
+        return hash((
+            hash(frozenset(self.boxes)),
+            hash(frozenset(self.walls)),
+            hash(self.player)
+        ))
 
 
     def __str__(self):
@@ -176,21 +155,23 @@ class Board(object):
         for y in range(self.num_lines):
             str_board.append([' ']*20)
 
-        for piece_set in [self.walls, self.boxes, self.goals]:
-            for (x, y) in piece_set.keys():
-                if str_board[y][x] == ' ':
-                    str_board[y][x] = piece_set[(x, y)].symbol()
+        for wall in self.walls:
+            str_board[wall.y][wall.x] = '#'
 
-        str_board[self.player.y][self.player.x] = self.player.symbol()
+        for box in self.boxes.difference(self.goals):
+            str_board[box.y][box.x] = '$'
+
+        for box in self.boxes.union(self.goals):
+            str_board[box.y][box.x] = '*'
+
+        for goal in self.goals.difference(self.boxes):
+            str_board[goal.y][goal.x] = '.'
+
+        if self.player in self.goals:
+            str_board[self.player.y][self.player.x] = '@'
+        else:
+            str_board[self.player.y][self.player.x] = '+'
 
         str_board = [''.join(line) for line in str_board]
         return '\n'.join(str_board)
-
-
-def hash_board(dict1, dict2, obj):
-    return hash((
-        hash(frozenset(dict1)),
-        hash(frozenset(dict2)),
-        hash(obj)
-    ))
 
