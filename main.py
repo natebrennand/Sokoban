@@ -11,7 +11,6 @@ from searches import greedy_best_first_search as gbfs
 from searches import a_star_search as ass
 
 
-
 searches = [
     (bfs, 'breadth first search'),
     (dfs, 'depth first search'),
@@ -69,7 +68,7 @@ def get_args():
         description='Get input for the sokoban program.')
     parser.add_argument('puzzle', metavar='P', nargs='?',
                         help='Puzzle to be solved by sokoban')
-    parser.add_argument('--test', dest='test', action='store_const',
+    parser.add_argument('--test', '--tests', dest='test', action='store_const',
                         const=True, default=False,
                         help='Run the suite of tests')
     parser.add_argument('--steps', dest='steps', action='store_const',
