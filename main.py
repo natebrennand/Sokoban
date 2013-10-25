@@ -10,14 +10,18 @@ from searches import uniform_cost_search as ucs
 from searches import greedy_best_first_search as gbfs
 from searches import a_star_search as ass
 
-
-searches = [
+# uninformed searches
+u_searches = [
     (bfs, 'breadth first search'),
     (dfs, 'depth first search'),
     (ucs, 'uniform cost search'),
+]
+# informed searches
+i_searches = [
     (gbfs, 'greedy best first search'),
     (ass, 'A* search')
 ]
+
 test_maps = [
     'easy_3',
     'moderate_1',
@@ -73,6 +77,8 @@ def get_args():
                         help='Run the suite of tests')
     parser.add_argument('--steps', dest='steps', action='store_const',
                         const=True, default=False)
+    parser.add_argument('--informed', dest='searches', action='store_const',
+                        const=i_searches, default=(i_searches+u_searches))
     args = parser.parse_args()
 
     if not args.test and not args.puzzle:
@@ -87,7 +93,7 @@ def test(args):
     for map_path in test_maps:
         print '{0}\n\tTesting on map {1}\n{0}'.format('-'*64, map_path)
 
-        for search, search_name in searches:
+        for search, search_name in args.searches:
             run_search( cli_args=args,
                 puzzle_path='sokoban_boards/{}.txt'.format(map_path),
                 search=search,
@@ -95,7 +101,8 @@ def test(args):
 
 
 def puzzle(args):
-    for search, search_name in searches:
+    print '{0}\n\tTesting on map {1}\n{0}'.format('-'*64, args.puzzle)
+    for search, search_name in args.searches:
         run_search(cli_args=args,
             puzzle_path=args.puzzle,
             search=search,

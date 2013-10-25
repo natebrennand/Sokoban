@@ -1,0 +1,38 @@
+----------------------------------------------------------------
+	Testing on map sokoban_boards/moderate_4.txt
+----------------------------------------------------------------
+Data for greedy best first search
+r,r,d,d,r,r,u,l,l,u,l,l,d,r,u,r,u,r,d,d,r,d,d,l,l,u,u,r,r,d,l
+        a)	557	Nodes generated
+        b)	220	Nodes repeated
+        c)	147	Nodes at the fringe of the search
+        d)	190	nodes explored
+        e)	0.348390102386 seconds
+        
+Data for A* search
+r,r,d,d,r,r,u,l,l,u,l,l,d,r,u,r,u,r,d,d,r,d,d,l,l,u,u,r,r,d,l
+        a)	283	Nodes generated
+        b)	121	Nodes repeated
+        c)	64	Nodes at the fringe of the search
+        d)	98	nodes explored
+        e)	0.174905776978 seconds
+        
+----------------------------------------------------------------
+	Testing on map sokoban_boards/moderate_5.txt
+----------------------------------------------------------------
+Data for greedy best first search
+u,l,l,d,l,d,r,u,u,r,r,d,l,l,r,r,d,d,l,u,l,u,u,r,r,d,l
+        a)	7364	Nodes generated
+        b)	3289	Nodes repeated
+        c)	1509	Nodes at the fringe of the search
+        d)	2566	nodes explored
+        e)	4.99835681915 seconds
+        
+Data for A* search
+u,l,l,d,u,r,r,d,d,l,l,u,l,r,d,r,r,u,l,d,l,l,u,u,l,l,d,d,r,r,u,r,l,d,r,u,u,r,r,d,l,l,r,r,d,d,l,u,l,u,u,r,r,d,l
+        a)	4977	Nodes generated
+        b)	2443	Nodes repeated
+        c)	796	Nodes at the fringe of the search
+        d)	1738	nodes explored
+        e)	3.47236609459 seconds
+        

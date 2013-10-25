@@ -1,0 +1,129 @@
+----------------------------------------------------------------
+	Testing on map easy_3
+----------------------------------------------------------------
+Data for greedy best first search
+d,l,l,u,r,d,r,u,u,u,d,d,r,r,u,u,u,l,l
+        a)	118	Nodes generated
+        b)	50	Nodes repeated
+        c)	24	Nodes at the fringe of the search
+        d)	44	nodes explored
+        e)	0.0742259025574 seconds
+        
+Data for A* search
+d,l,l,u,r,d,r,u,u,u,d,d,r,r,u,u,u,l,l
+        a)	213	Nodes generated
+        b)	95	Nodes repeated
+        c)	35	Nodes at the fringe of the search
+        d)	83	nodes explored
+        e)	0.133935928345 seconds
+        
+Data for breadth first search
+d,l,l,u,r,d,r,u,u,u,d,d,r,r,u,u,u,l,l
+        a)	1073	Nodes generated
+        b)	612	Nodes repeated
+        c)	25	Nodes at the fringe of the search
+        d)	312	nodes explored
+        e)	0.65202498436 seconds
+        
+Data for depth first search
+d,l,l,u,r,l,d,r,r,u,u,u,d,d,l,l,d,r,r,r,r,u,u,u,u,l,l
+        a)	793	Nodes generated
+        b)	466	Nodes repeated
+        c)	12	Nodes at the fringe of the search
+        d)	262	nodes explored
+        e)	0.483373165131 seconds
+        
+Data for uniform cost search
+d,l,l,u,r,d,r,u,u,u,d,d,r,r,u,u,u,l,l
+        a)	877	Nodes generated
+        b)	503	Nodes repeated
+        c)	18	Nodes at the fringe of the search
+        d)	356	nodes explored
+        e)	0.537933826447 seconds
+        
+----------------------------------------------------------------
+	Testing on map moderate_1
+----------------------------------------------------------------
+Data for greedy best first search
+d,l,u,r,r,r,d,l,u,l,l,d,d,r,u,l,u,r,u,u,l,d,d,r,d,r,r,u,l,d,l,u,d,d,l,u,r,u,u
+        a)	818	Nodes generated
+        b)	422	Nodes repeated
+        c)	80	Nodes at the fringe of the search
+        d)	316	nodes explored
+        e)	0.470383167267 seconds
+        
+Data for A* search
+d,l,u,r,r,r,d,l,u,l,l,d,d,r,u,l,u,r,u,u,l,d,d,r,d,r,r,u,l,d,l,u,d,d,l,u,r,u,u
+        a)	953	Nodes generated
+        b)	519	Nodes repeated
+        c)	64	Nodes at the fringe of the search
+        d)	370	nodes explored
+        e)	0.549296140671 seconds
+        
+Data for breadth first search
+d,l,u,r,r,r,d,l,u,l,l,d,d,r,u,l,u,r,u,u,l,d,r,d,d,r,r,u,l,d,l,u,u
+        a)	3289	Nodes generated
+        b)	1977	Nodes repeated
+        c)	7	Nodes at the fringe of the search
+        d)	554	nodes explored
+        e)	1.8367459774 seconds
+        
+Data for depth first search
+d,l,u,d,d,r,u,u,r,r,d,l,r,u,l,l,l,d,d,r,u,l,u,r,u,u,l,d,d,r,d,d,l,u,d,r,u,r,r,u,l,d,l,u,u
+        a)	1683	Nodes generated
+        b)	1026	Nodes repeated
+        c)	25	Nodes at the fringe of the search
+        d)	500	nodes explored
+        e)	0.948416948318 seconds
+        
+Data for uniform cost search
+d,l,u,r,r,r,d,l,u,l,l,d,d,r,u,l,u,r,u,u,l,d,r,d,d,r,r,u,l,d,l,u,u
+        a)	1448	Nodes generated
+        b)	865	Nodes repeated
+        c)	11	Nodes at the fringe of the search
+        d)	572	nodes explored
+        e)	0.809721946716 seconds
+        
+----------------------------------------------------------------
+	Testing on map moderate_2
+----------------------------------------------------------------
+Data for greedy best first search
+r,d,l,d,d,r,r,r,u,u,l,l,r,r,d,d,l,l,u,d,r,r,u,u,l,u,l,l,d,r,d,d,l,u
+        a)	414	Nodes generated
+        b)	188	Nodes repeated
+        c)	55	Nodes at the fringe of the search
+        d)	171	nodes explored
+        e)	0.23045706749 seconds
+        
+Data for A* search
+r,d,l,d,d,r,r,r,u,u,l,l,r,r,d,d,l,l,u,d,r,r,u,u,l,u,l,l,d,r,d,d,l,u
+        a)	310	Nodes generated
+        b)	145	Nodes repeated
+        c)	41	Nodes at the fringe of the search
+        d)	124	nodes explored
+        e)	0.172579050064 seconds
+        
+Data for breadth first search
+r,d,l,d,d,r,r,r,u,u,l,l,r,r,d,d,l,l,u,d,r,r,u,u,l,u,l,l,d,r,d,d,l,u
+        a)	2951	Nodes generated
+        b)	1702	Nodes repeated
+        c)	6	Nodes at the fringe of the search
+        d)	744	nodes explored
+        e)	1.59735608101 seconds
+        
+Data for depth first search
+r,d,l,d,d,r,r,r,u,u,l,l,r,r,d,d,l,l,u,l,d,r,r,r,u,u,l,u,l,l,d,r,d,d,l,u
+        a)	1587	Nodes generated
+        b)	917	Nodes repeated
+        c)	14	Nodes at the fringe of the search
+        d)	553	nodes explored
+        e)	0.868530035019 seconds
+        
+Data for uniform cost search
+r,d,l,d,d,r,r,r,u,u,l,l,r,r,d,d,l,l,u,d,r,r,u,u,l,u,l,l,d,r,d,d,l,u
+        a)	1773	Nodes generated
+        b)	1022	Nodes repeated
+        c)	2	Nodes at the fringe of the search
+        d)	749	nodes explored
+        e)	0.986471891403 seconds
+        

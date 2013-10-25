@@ -6,7 +6,7 @@
 **Class:** COMS 4701  
 
 ---
-##Running It
+##Running/Testing
 
     # to see all options
     python main.py --help
@@ -15,6 +15,11 @@ To run the tests, use `python main.py --tests`.
 This will run each search with 3 maps provided by Voris.
 
 To run an indivual puzzle, use `python main.py path/to/the/puzzle.txt`. All puzzle provided by Jon Voris are located in the `sokoban_boards/` directory.
+
+To compare only GBFS and A* use the `--informed` flag.
+
+- a copy of the data I gathered on my local machine in `standard_test_output.txt`
+- a comparison of GBFS & A* on more complicated puzzles is in `informed_test_output.txt`
 
 ---
 ##Overview
@@ -46,6 +51,7 @@ Due to their nature their runtimes skyrocket as the map size increases.
 Both GBFS and A* perform significantly better than the uninformed searches.
 My GBFS implementation tends to beat my A* on the simpler puzzles I used for testing.
 When I turned off the other searches to compare just these two and increased the complexity A* began to outperform BGFS as would be expected.
+Examples of comparisons between just these two searches are located in `informed_test_output.txt`
 
 ---
 ##Notes
