@@ -20,9 +20,9 @@ searches = [
     (ass, 'A* search')
 ]
 test_maps = [
-    'easy_1',
     'easy_3',
-    'moderate_1'
+    'moderate_1',
+    'moderate_2',
 ]
 
 def reportit(f):

@@ -35,7 +35,7 @@ def a_star_search(board, print_steps=False):
             print records
             raise Exception('Solution not found.')
 
-        total_cost, real_cost, node_board = board_queue.pop()
+        total_cost, real_cost, node_board = board_queue.pop()   # grab the top of the queue
 
         if node_board.finished():   # return if solved
             return records, node_board
