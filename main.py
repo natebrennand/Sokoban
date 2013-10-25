@@ -8,12 +8,16 @@ from searches import breadth_first_search as bfs
 from searches import depth_first_search as dfs
 from searches import uniform_cost_search as ucs
 from searches import greedy_best_first_search as gbfs
+from searches import a_star_search as ass
+
+
 
 searches = [
     (bfs, 'breadth first search'),
     (dfs, 'depth first search'),
     (ucs, 'uniform cost search'),
     (gbfs, 'greedy best first search'),
+    (ass, 'A* search')
 ]
 test_maps = [
     'easy_1',
