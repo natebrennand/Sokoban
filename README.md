@@ -24,11 +24,11 @@ To compare only GBFS and A* use the `--informed` flag.
 ---
 ##Overview
 
-The Sokoban puzzle board is represented by a the `Board` object (`board/board.py`).
+The Sokoban puzzle board is represented by the `Board` object (`board/board.py`).
 Each item on the board (wall, goal, box, etc) is represented with a `Position` object (`board/position.py`). 
 Using a `Position` object allowed the `Board` object code to be much clearer with overloaded methods.
 All `Position` objects in `Board` are held in sets.
-This makes the code very easy to read and relatively fast.
+This makes the code very easy to read and relatively fast and allowed easy comparison of board states caculating a hash based on the items on the board.
 
 
 The five search algorithms are located in the `search` directory.
@@ -72,6 +72,6 @@ The returned value is the sum of estimates for the player's distance to the near
 - Manhattan distance between each block w/o a goal and the nearest goal
   - Mutiple blocks "aiming" at the same goal is not adjusted for
 
-Because multiple blocks can "aim" at the same goal and player maneuvering is not accounted for, this is an **admisible heuristic**.
+Because multiple blocks can "aim" at the same goal and player maneuvering is not accounted for, this is an **admissible heuristic**.
 The number of steps to finish from the next state will never be less than the estimate by this heuristic.
 
