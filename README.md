@@ -1,5 +1,6 @@
 
 
+
 #Sokoban Puzzle Solver
 
 ---
@@ -15,8 +16,10 @@ To run an indivual puzzle, use `python main.py path/to/the/puzzle.txt`. All puzz
 
 To compare only GBFS and A\* use the `--informed` flag.
 
-- a copy of the data I gathered on my local machine in `standard_test_output.txt`
-- a comparison of GBFS & A\* on more complicated puzzles is in `informed_test_output.txt`
+To compare only DFS, BFS & UCS use the `--uninformed` flag.
+
+- a copy of the data I gathered on my local machine in `sample_output/standard_test_output.txt`
+- a comparison of GBFS & A\* on more complicated puzzles is in `sample_output/informed_test_output.txt`
 
 ---
 ##Overview
@@ -39,18 +42,6 @@ In `main.py` maps are loaded before being passed to each of the searches.
 Reports are then compiled with data returned by the searches.
 
 ---
-##Thoughts
-
-BFS, DFS and UCS all have similar runtimes.
-The best for each map seems to depend more on the shape than anything else.
-Due to their nature their runtimes skyrocket as the map size increases.
-
-Both GBFS and A\* perform significantly better than the uninformed searches.
-My GBFS implementation tends to beat my A\* on the simpler puzzles I used for testing.
-When I turned off the other searches to compare just these two and increased the complexity A\* began to outperform BGFS as would be expected.
-Examples of comparisons between just these two searches are located in `informed_test_output.txt`
-
----
 ##Notes
 
 ###DFS
@@ -71,4 +62,16 @@ The returned value is the sum of estimates for the player's distance to the near
 
 Because multiple blocks can "aim" at the same goal and player maneuvering is not accounted for, this is an **admissible heuristic**.
 The number of steps to finish from the next state will never be less than the estimate by this heuristic.
+
+---
+##Thoughts
+
+BFS, DFS and UCS all have similar runtimes.
+The best for each map seems to depend more on the shape than anything else.
+Due to their nature their runtimes skyrocket as the map size increases.
+
+Both GBFS and A\* perform significantly better than the uninformed searches.
+My GBFS implementation tends to beat my A\* on the simpler puzzles I used for testing.
+When I turned off the other searches to compare just these two and increased the complexity A\* began to outperform BGFS as would be expected.
+Examples of comparisons between just these two searches are located in `sample_output/informed_test_output.txt`
 

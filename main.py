@@ -79,6 +79,8 @@ def get_args():
                         const=True, default=False)
     parser.add_argument('--informed', dest='searches', action='store_const',
                         const=i_searches, default=(i_searches+u_searches))
+    parser.add_argument('--uninformed', dest='searches', action='store_const',
+                        const=u_searches, default=(i_searches+u_searches))
     args = parser.parse_args()
 
     if not args.test and not args.puzzle:
