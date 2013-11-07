@@ -4,11 +4,11 @@ from sys import exit
 import argparse
 import time
 
-from searches import breadth_first_search as bfs
-from searches import depth_first_search as dfs
-from searches import uniform_cost_search as ucs
-from searches import greedy_best_first_search as gbfs
-from searches import a_star_search as ass
+from searches import breadth_first_search       as bfs
+from searches import depth_first_search         as dfs
+from searches import uniform_cost_search        as ucs
+from searches import greedy_best_first_search   as gbfs
+from searches import a_star_search              as ass
 
 # uninformed searches
 u_searches = [

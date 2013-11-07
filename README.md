@@ -2,10 +2,6 @@
 
 #Sokoban Puzzle Solver
 
-**Name:** Nate Brennand  
-**UNI:** nsb2142  
-**Class:** COMS 4701  
-
 ---
 ##Running/Testing
 
